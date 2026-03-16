@@ -12,6 +12,7 @@ interface RiddleFormProps {
 }
 
 const emptyForm = {
+  title: '',
   question: '',
   answer: '',
   clues: [''],
@@ -24,6 +25,7 @@ export default function RiddleForm({ riddle, categories, onSuccess, onCancel }: 
   const [form, setForm] = useState(() =>
     riddle
       ? {
+          title: riddle.title ?? '',
           question: riddle.question,
           answer: riddle.answer,
           clues: riddle.clues.length > 0 ? [...riddle.clues] : [''],
@@ -42,6 +44,7 @@ export default function RiddleForm({ riddle, categories, onSuccess, onCancel }: 
   useEffect(() => {
     if (riddle) {
       setForm({
+        title: riddle.title ?? '',
         question: riddle.question,
         answer: riddle.answer,
         clues: riddle.clues.length > 0 ? [...riddle.clues] : [''],
@@ -100,6 +103,7 @@ export default function RiddleForm({ riddle, categories, onSuccess, onCancel }: 
     const cleanClues = form.clues.filter(c => c.trim() !== '')
 
     const payload = {
+      title: form.title.trim() || null,
       question: form.question.trim(),
       answer: form.answer.trim(),
       clues: cleanClues,
@@ -145,6 +149,24 @@ export default function RiddleForm({ riddle, categories, onSuccess, onCancel }: 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Title */}
+      <div>
+        <label className={labelClass} style={labelStyle}>
+          Title{' '}
+          <span className="text-xs font-normal" style={{ color: 'var(--text-muted)' }}>
+            (optional)
+          </span>
+        </label>
+        <input
+          type="text"
+          value={form.title}
+          onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+          placeholder="Give this riddle a name..."
+          className={inputClass}
+          style={inputStyle}
+        />
+      </div>
+
       {/* Question */}
       <div>
         <label className={labelClass} style={labelStyle}>

@@ -27,4 +27,8 @@ await sql`
   )
 `
 
+await sql`
+  ALTER TABLE riddles ADD COLUMN IF NOT EXISTS title TEXT
+`
+
 console.log('Migration complete')

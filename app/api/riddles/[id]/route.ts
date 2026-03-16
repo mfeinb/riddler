@@ -36,7 +36,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
 
   try {
     const body = await request.json()
-    const { question, answer, clues = [], category = 'General', difficulty = 'medium', image_url = null } = body
+    const { title = null, question, answer, clues = [], category = 'General', difficulty = 'medium', image_url = null } = body
 
     if (!question?.trim()) {
       return NextResponse.json({ error: 'Question is required' }, { status: 400 })
@@ -55,6 +55,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
 
     const rows = await sql`
       UPDATE riddles SET
+        title = ${title ? title.trim() : null},
         question = ${question.trim()},
         answer = ${answer.trim()},
         clues = ${cleanClues},

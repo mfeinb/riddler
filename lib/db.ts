@@ -14,6 +14,7 @@ export const sql: NeonQueryFunction<false, false> = ((...args: Parameters<NeonQu
 
 export type Riddle = {
   id: number
+  title: string | null
   question: string
   answer: string
   clues: string[]

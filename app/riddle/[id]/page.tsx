@@ -30,10 +30,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? riddle.question.slice(0, 120) + '...'
     : riddle.question
   return {
-    title: `Riddle #${riddle.id} | The Riddler`,
+    title: `${riddle.title ? riddle.title + ' | ' : ''}Riddle #${riddle.id} | The Riddler`,
     description: preview,
     openGraph: {
-      title: `Can you solve this ${riddle.difficulty} riddle?`,
+      title: riddle.title ?? `Can you solve this ${riddle.difficulty} riddle?`,
       description: preview,
       ...(riddle.image_url ? { images: [riddle.image_url] } : {}),
     },
@@ -64,7 +64,7 @@ export default async function RiddlePage({ params }: Props) {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
-          Riddle #{riddle.id}
+          {riddle.title ?? `Riddle #${riddle.id}`}
         </h1>
         <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
           Category: <span style={{ color: 'var(--text-secondary)' }}>{riddle.category}</span>

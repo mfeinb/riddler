@@ -56,7 +56,8 @@ export default function HomePage() {
     const matchSearch =
       search === '' ||
       r.question.toLowerCase().includes(search.toLowerCase()) ||
-      r.category.toLowerCase().includes(search.toLowerCase())
+      r.category.toLowerCase().includes(search.toLowerCase()) ||
+      (r.title?.toLowerCase().includes(search.toLowerCase()) ?? false)
     const matchCategory = category === 'all' || r.category === category
     const matchDifficulty = difficulty === 'all' || r.difficulty === difficulty
     return matchSearch && matchCategory && matchDifficulty
@@ -257,7 +258,7 @@ export default function HomePage() {
               id={`riddle-${riddle.id}`}
               className="transition-all duration-500"
             >
-              <RiddleCard riddle={riddle} onSolved={handleSolved} highlight={highlightId === riddle.id} />
+              <RiddleCard riddle={riddle} onSolved={handleSolved} highlight={highlightId === riddle.id} compact />
             </div>
           ))}
         </div>

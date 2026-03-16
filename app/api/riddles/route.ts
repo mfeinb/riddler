@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const { question, answer, clues = [], category = 'General', difficulty = 'medium', image_url = null } = body
+    const { title = null, question, answer, clues = [], category = 'General', difficulty = 'medium', image_url = null } = body
 
     if (!question?.trim()) {
       return NextResponse.json({ error: 'Question is required' }, { status: 400 })
@@ -38,8 +38,9 @@ export async function POST(request: NextRequest) {
     const cleanClues = clues.filter((c: string) => c && c.trim() !== '')
 
     const rows = await sql`
-      INSERT INTO riddles (question, answer, clues, image_url, category, difficulty)
+      INSERT INTO riddles (title, question, answer, clues, image_url, category, difficulty)
       VALUES (
+        ${title ? title.trim() : null},
         ${question.trim()},
         ${answer.trim()},
         ${cleanClues},
