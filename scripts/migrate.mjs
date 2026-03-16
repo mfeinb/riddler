@@ -11,7 +11,8 @@ try {
 
 import { neon } from '@neondatabase/serverless'
 
-const sql = neon(process.env.DATABASE_URL)
+const url = process.env.DATABASE_URL.replace('channel_binding=require', '').replace(/&&|&$|\?$/, '')
+const sql = neon(url)
 
 await sql`
   CREATE TABLE IF NOT EXISTS riddles (
