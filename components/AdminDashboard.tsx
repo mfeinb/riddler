@@ -220,9 +220,14 @@ export default function AdminDashboard({ initialRiddles, initialCategories }: Pr
                         </span>
                       )}
                     </div>
+                    {riddle.title && (
+                      <p className="text-sm font-semibold mb-0.5" style={{ color: 'var(--text-primary)' }}>
+                        {riddle.title}
+                      </p>
+                    )}
                     <p
-                      className="text-sm font-medium line-clamp-2"
-                      style={{ color: 'var(--text-primary)' }}
+                      className="text-sm line-clamp-2"
+                      style={{ color: riddle.title ? 'var(--text-muted)' : 'var(--text-primary)' }}
                     >
                       {riddle.question}
                     </p>

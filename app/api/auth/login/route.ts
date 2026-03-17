@@ -1,7 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createSession } from '@/lib/auth'
+import { checkRateLimit } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown'
+  const { allowed, retryAfterSecs } = checkRateLimit(ip)
+
+  if (!allowed) {
+    return NextResponse.json(
+      { error: `Too many attempts. Try again in ${Math.ceil(retryAfterSecs / 60)} minutes.` },
+      { status: 429, headers: { 'Retry-After': String(retryAfterSecs) } }
+    )
+  }
+
   try {
     const body = await request.json()
     const { password } = body

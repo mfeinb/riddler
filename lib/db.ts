@@ -1,16 +1,21 @@
 import { neon, NeonQueryFunction } from '@neondatabase/serverless'
 
+let _sql: NeonQueryFunction<false, false> | null = null
+
 export function getDb(): NeonQueryFunction<false, false> {
-  if (!process.env.DATABASE_URL) {
-    throw new Error('DATABASE_URL environment variable is not set')
+  if (!_sql) {
+    if (!process.env.DATABASE_URL) {
+      throw new Error('DATABASE_URL environment variable is not set')
+    }
+    _sql = neon(process.env.DATABASE_URL)
   }
-  const url = process.env.DATABASE_URL.replace('channel_binding=require', '').replace(/&&|&$|\?$/, '')
-  return neon(url)
+  return _sql
 }
 
-export const sql: NeonQueryFunction<false, false> = ((...args: Parameters<NeonQueryFunction<false, false>>) => {
-  return getDb()(...args)
-}) as NeonQueryFunction<false, false>
+export const sql: NeonQueryFunction<false, false> = (
+  (...args: Parameters<NeonQueryFunction<false, false>>) =>
+    getDb()(...args)
+) as NeonQueryFunction<false, false>
 
 export type Riddle = {
   id: number
